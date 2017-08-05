@@ -18,11 +18,13 @@ public class NetworkUtils {
 
     private static final String TAG = NetworkUtils.class.getSimpleName();
 
-    private static final String MOVIE_BASE_URL = "http://api.themoviedb.org/3/discover/movie";
+    private static final String MOVIE_BASE_URL = "http://api.themoviedb.org/3/";
 
-    private static final String MOVIE_POPULAR = "popular";
+    public static final String MOVIE_DISCOVER = "discover/movie";
 
-    private static final String MOVIE_TOP_RATED = "top_rated";
+    public static final String MOVIE_POPULAR = "movie/popular";
+
+    public static final String MOVIE_TOP_RATED = "movie/top_rated";
 
     private static final String MOVIE_IMG_BASE_URL = "http://image.tmdb.org/t/p";
 
@@ -30,7 +32,7 @@ public class NetworkUtils {
 
     private static final String MOVIE_API_KEY = "";
 
-    private static final String API_PARAM = "api_key";
+    private static final String API_PARAM = "?api_key=";
 
     //build movie image url
     public static URL buildURL(String imageLocation){
@@ -51,8 +53,7 @@ public class NetworkUtils {
     }
 
     public static String getResponseFromHttpUrl (String movieUrl) throws IOException {
-        //URL url = buildURL(movieUrl);
-        URL url = new URL(MOVIE_BASE_URL + "?api_key=09c9e331efb5e1fb13ac90d94582b869");
+        URL url = new URL(MOVIE_BASE_URL + movieUrl +API_PARAM + MOVIE_API_KEY);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
         try {

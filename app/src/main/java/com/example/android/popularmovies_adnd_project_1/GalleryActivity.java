@@ -10,6 +10,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -61,8 +63,29 @@ public class GalleryActivity extends AppCompatActivity implements MovieAdapterOn
         //connect recycleview to adapter
         mRecyclerView.setAdapter(mMovieAdapter);
 
-        new FetchMoviesTask().execute("blah");
+        new FetchMoviesTask().execute(NetworkUtils.MOVIE_POPULAR);
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        switch (itemId) {
+
+            case R.id.sort_popular:
+                getMovies(NetworkUtils.MOVIE_POPULAR);
+
+            case R.id.sort_top_rated:
+                getMovies(NetworkUtils.MOVIE_TOP_RATED);
+        }
+
+        return true;
     }
 
     @Override
@@ -99,6 +122,12 @@ public class GalleryActivity extends AppCompatActivity implements MovieAdapterOn
         mErrorMessageDisplay.setVisibility(View.VISIBLE);
     }
 
+    private void getMovies(String url){
+        new FetchMoviesTask().execute(url);
+
+    }
+
+
     public class FetchMoviesTask extends AsyncTask<String, Void, ArrayList<Movie>>{
 
         @Override
@@ -109,7 +138,7 @@ public class GalleryActivity extends AppCompatActivity implements MovieAdapterOn
 
         @Override
         protected ArrayList<Movie> doInBackground(String... strings) {
-            String url = "http://api.themoviedb.org/3/discover/movie";
+            String url = strings[0];
 
             try {
                  String results = NetworkUtils.getResponseFromHttpUrl(url);
